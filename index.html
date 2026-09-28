@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Modern responsive Resume Builder with live preview, ATS-friendly templates, local storage and PDF printing.">
+  <meta name="theme-color" content="#07111f">
+  <title>NovaResume — Modern Resume Builder</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="loader" class="loader">
+    <div class="loader-ring"></div>
+    <p>Building your workspace...</p>
+  </div>
+
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="NovaResume home">
+      <span class="brand-mark">N</span>
+      <span>Nova<span>Resume</span></span>
+    </a>
+
+    <div class="top-actions">
+      <button id="themeToggle" class="icon-btn" type="button" title="Toggle theme" aria-label="Toggle theme">☼</button>
+      <button id="saveBtn" class="secondary-btn" type="button">Save</button>
+      <button id="downloadBtn" class="primary-btn" type="button">Download PDF</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-orb orb-one"></div>
+      <div class="hero-orb orb-two"></div>
+      <div class="hero-content">
+        <div class="eyebrow">✦ PROFESSIONAL RESUME BUILDER</div>
+        <h1>Build a resume that<br><span>gets noticed.</span></h1>
+        <p>Create a polished, ATS-friendly resume in minutes. Edit on the left, see the final result live on the right.</p>
+        <div class="hero-stats">
+          <div><strong>100%</strong><span>Browser based</span></div>
+          <div><strong>ATS</strong><span>Friendly layouts</span></div>
+          <div><strong>∞</strong><span>Free edits</span></div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="mini-window">
+          <div class="mini-dots"><i></i><i></i><i></i></div>
+          <div class="mini-layout">
+            <div class="mini-sidebar"></div>
+            <div class="mini-content">
+              <span></span><span></span><span class="long"></span>
+              <div class="mini-lines"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="builder-shell" id="builder">
+      <aside class="editor-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="section-kicker">EDITOR</span>
+            <h2>Your Resume</h2>
+          </div>
+          <button id="resetBtn" class="text-btn" type="button">Reset</button>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress-top"><span>Profile completeness</span><strong id="progressText">0%</strong></div>
+          <div class="progress-bar"><span id="progressBar"></span></div>
+        </div>
+
+        <div class="template-picker">
+          <label>Template</label>
+          <div class="template-options">
+            <button class="template-card active" data-template="classic" type="button">
+              <span class="template-thumb classic-thumb"></span><b>Classic</b>
+            </button>
+            <button class="template-card" data-template="minimal" type="button">
+              <span class="template-thumb minimal-thumb"></span><b>Minimal</b>
+            </button>
+            <button class="template-card" data-template="modern" type="button">
+              <span class="template-thumb modern-thumb"></span><b>Modern</b>
+            </button>
+          </div>
+        </div>
+
+        <form id="resumeForm" novalidate>
+          <details open>
+            <summary><span class="summary-icon">01</span> Personal Information <span>⌄</span></summary>
+            <div class="details-body">
+              <div class="photo-row">
+                <div id="photoPreview" class="photo-preview">👤</div>
+                <div>
+                  <label class="upload-btn">Upload Photo
+                    <input id="photoInput" type="file" accept="image/*">
+                  </label>
+                  <small>JPG/PNG, square image recommended</small>
+                </div>
+              </div>
+              <div class="field-grid">
+                <label>Full Name<input id="fullName" name="fullName" type="text" placeholder="Alex Morgan"></label>
+                <label>Job Title<input id="jobTitle" name="jobTitle" type="text" placeholder="Software Engineer"></label>
+                <label>Email<input id="email" name="email" type="email" placeholder="alex@example.com"></label>
+                <label>Phone<input id="phone" name="phone" type="tel" placeholder="+91 98765 43210"></label>
+                <label>Location<input id="location" name="location" type="text" placeholder="Jalandhar, Punjab, India"></label>
+                <label>Website<input id="website" name="website" type="url" placeholder="https://example.com"></label>
+              </div>
+            </div>
+          </details>
+
+          <details open>
+            <summary><span class="summary-icon">02</span> Profile Summary <span>⌄</span></summary>
+            <div class="details-body">
+              <label>Professional summary
+                <textarea id="summary" rows="5" maxlength="600" placeholder="Write 2–4 concise sentences about your experience, strengths and career direction."></textarea>
+              </label>
+            </div>
+          </details>
+
+          <details open>
+            <summary><span class="summary-icon">03</span> Education <span>⌄</span></summary>
+            <div class="details-body">
+              <div id="educationList"></div>
+              <button class="add-btn" data-add="education" type="button">＋ Add Education</button>
+            </div>
+          </details>
+
+          <details open>
+            <summary><span class="summary-icon">04</span> Skills <span>⌄</span></summary>
+            <div class="details-body">
+              <label>Skills <span class="muted">comma separated</span>
+                <input id="skills" type="text" placeholder="JavaScript, HTML, CSS, Git, Communication">
+              </label>
+            </div>
+          </details>
+
+          <details open>
+            <summary><span class="summary-icon">05</span> Projects <span>⌄</span></summary>
+            <div class="details-body">
+              <div id="projectsList"></div>
+              <button class="add-btn" data-add="projects" type="button">＋ Add Project</button>
+            </div>
+          </details>
+
+          <details>
+            <summary><span class="summary-icon">06</span> Experience <span>⌄</span></summary>
+            <div class="details-body">
+              <div id="experienceList"></div>
+              <button class="add-btn" data-add="experience" type="button">＋ Add Experience</button>
+            </div>
+          </details>
+
+          <details>
+            <summary><span class="summary-icon">07</span> Certifications <span>⌄</span></summary>
+            <div class="details-body">
+              <div id="certificationsList"></div>
+              <button class="add-btn" data-add="certifications" type="button">＋ Add Certification</button>
+            </div>
+          </details>
+
+          <details>
+            <summary><span class="summary-icon">08</span> Achievements <span>⌄</span></summary>
+            <div class="details-body">
+              <div id="achievementsList"></div>
+              <button class="add-btn" data-add="achievements" type="button">＋ Add Achievement</button>
+            </div>
+          </details>
+
+          <details>
+            <summary><span class="summary-icon">09</span> Languages <span>⌄</span></summary>
+            <div class="details-body">
+              <div id="languagesList"></div>
+              <button class="add-btn" data-add="languages" type="button">＋ Add Language</button>
+            </div>
+          </details>
+
+          <details>
+            <summary><span class="summary-icon">10</span> Contact Information <span>⌄</span></summary>
+            <div class="details-body">
+              <div class="field-grid">
+                <label>LinkedIn<input id="linkedin" type="url" placeholder="https://linkedin.com/in/alex"></label>
+                <label>GitHub<input id="github" type="url" placeholder="https://github.com/alex"></label>
+              </div>
+            </div>
+          </details>
+        </form>
+      </aside>
+
+      <section class="preview-panel">
+        <div class="preview-toolbar">
+          <div><span class="live-dot"></span> Live Preview</div>
+          <div class="preview-actions">
+            <button id="zoomOut" class="small-btn" type="button">−</button>
+            <span id="zoomValue">100%</span>
+            <button id="zoomIn" class="small-btn" type="button">＋</button>
+            <button id="printBtn" class="secondary-btn" type="button">Print</button>
+          </div>
+        </div>
+
+        <div class="paper-stage">
+          <article id="resumePreview" class="resume-paper template-classic" aria-label="Resume preview">
+            <!-- Rendered by JavaScript -->
+          </article>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <footer class="footer">
+    <span>NovaResume © 2026</span>
+    <span>Built with HTML • CSS • JavaScript</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
